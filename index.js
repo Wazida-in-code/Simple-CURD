@@ -12,6 +12,28 @@ app.use(express.json())
 
 const client = new MongoClient(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.0jmuayl.mongodb.net/`);
 
+export async function connectToMongoDB() {
+    try {
+        await client.connect()
+        console.log('Successfully connected to Mongodb');
+        return client
+    }
+    catch(err){
+        console.dir(err);
+    }
+}
+
+const connectedClient = await connectToMongoDB()
+const db = connectedClient.db('SimpleCurdDB')
+const users = db.collection('users')
+
+
+app.get('/users', async(req, res) => {
+    const cursor = users.find({});
+    const allUsers = await cursor.toArray();
+    res.send(allUsers)
+})
+
 app.get('/', (req, res) => {
     res.send("CURD is started...")
 })
