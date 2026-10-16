@@ -34,6 +34,13 @@ app.get('/users', async(req, res) => {
     res.send(allUsers)
 })
 
+
+app.post('/users', async(req, res) => {
+    const newUser = req.body
+    const result = await users.insertOne(newUser)
+    res.send(result)
+})
+
 app.get('/', (req, res) => {
     res.send("CURD is started...")
 })
