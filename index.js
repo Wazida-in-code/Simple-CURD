@@ -49,6 +49,24 @@ app.get('/users/:id', async(req, res) => {
     res.send(result)
 })
 
+app.patch('/users/:id', async (req, res) => {
+    const id = req.params.id;
+    const updateUser = req.body;
+    const filter = {
+        _id: new ObjectId(id)
+    }
+    const options = {upsert: true}
+    const updateDoc = {
+        $set: {
+            name: updateUser.name,
+            email: updateUser.email
+        }
+    }
+    const result = await users.updateOne(filter, updateDoc, options)
+    res.send(result)
+})
+
+
 app.delete('/users/:id', async(req, res) => {
     const id = req.params.id;
     const query = {_id: new ObjectId(id)}
